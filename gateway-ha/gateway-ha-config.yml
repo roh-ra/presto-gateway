@@ -47,3 +47,7 @@ logging:
       archivedFileCount: 7
       timeZone: UTC
       maxFileSize: 100MB
+
+
+ruleEngine:
+    enabled: false

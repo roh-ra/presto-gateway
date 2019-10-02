@@ -123,6 +123,15 @@ public class QueryIdCachingProxyHandler extends ProxyHandler {
     return targetLocation;
   }
 
+  private String getRoutingBackend() {
+    /*
+        if (ruleEngine) -> fire
+        else if (routingGroup) -> group
+        else adhoc
+     */
+    return null;
+  }
+
   protected String extractQueryIdIfPresent(HttpServletRequest request) {
     String path = request.getRequestURI();
     String queryParams = request.getQueryString();
