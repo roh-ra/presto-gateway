@@ -11,6 +11,12 @@
 
     <artifactId>rule-engine</artifactId>
 
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>org.jeasy</groupId>
@@ -19,10 +25,25 @@
         </dependency>
         <dependency>
             <groupId>org.jeasy</groupId>
-            <artifactId>easy-rules</artifactId>
+            <artifactId>easy-rules-core</artifactId>
             <version>3.3.0</version>
-            <type>pom</type>
         </dependency>
+        <dependency>
+            <groupId>org.jeasy</groupId>
+            <artifactId>easy-rules-mvel</artifactId>
+            <version>3.3.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jeasy</groupId>
+            <artifactId>easy-rules-support</artifactId>
+            <version>3.3.0</version>
+        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.jeasy</groupId>-->
+            <!--<artifactId>easy-rules</artifactId>-->
+            <!--<version>3.3.0</version>-->
+            <!--<type>pom</type>-->
+        <!--</dependency>-->
     </dependencies>
 
 </project>
