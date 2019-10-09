@@ -6,10 +6,13 @@
         <artifactId>prestogateway-parent</artifactId>
         <groupId>com.lyft.data</groupId>
         <version>1.6.4</version>
+        <relativePath>../</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>rule-engine</artifactId>
+    <packaging>jar</packaging>
+
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -38,12 +41,17 @@
             <artifactId>easy-rules-support</artifactId>
             <version>3.3.0</version>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>org.jeasy</groupId>-->
-            <!--<artifactId>easy-rules</artifactId>-->
-            <!--<version>3.3.0</version>-->
-            <!--<type>pom</type>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
     </dependencies>
 
 </project>

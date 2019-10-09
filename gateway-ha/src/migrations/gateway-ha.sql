@@ -19,45 +19,31 @@ source VARCHAR(256)
 CREATE INDEX query_history_created_idx ON query_history(created);
 
 CREATE TABLE IF NOT EXISTS rule_type (
-type_id INT PRIMARY KEY,
-type_name VARCHAR(256) NOT NULL,
+name VARCHAR(256)  PRIMARY KEY,
 description VARCHAR(256),
-priority INT DEFAULT 10000 ,
-status BOOLEAN
+priority INT NOT NULL,
+status BOOLEAN DEFAULT TRUE
 )
 
-CREATE TABLE IF NOT EXISTS rule (
-rule_id VARCHAR(256) PRIMARY KEY,
-type_id  INT NOT NULL,
+CREATE TABLE IF NOT EXISTS routingRule (
+type_name VARCHAR(256) NOT NULL,
+subject VARCHAR(256) NOT NULL,
 priority INT DEFAULT 10000,
-condition_type INT NOT NULL,
-condition_value VARCHAR(256) NOT NULL,
 action_type ENUM ('REDIRECT','BLACKLIST','DEFAULT') DEFAULT 'DEFAULT' NOT NULL,
 action_value VARCHAR(256) DEFAULT 'adhoc',
-status BOOLEAN,
-FOREIGN KEY (type_id) REFERENCES rule_type(type_id) ON  DELETE CASCADE,
-FOREIGN KEY (condition_type) REFERENCES condition_type(id) ON DELETE CASCADE
+status BOOLEAN DEFAULT TRUE,
+PRIMARY KEY (type_name, subject),
+FOREIGN KEY (type_name) REFERENCES rule_type(name) ON  DELETE CASCADE
 )
 
-CREATE TABLE IF NOT EXISTS condition_type (
-id INT PRIMARY KEY,
-name VARCHAR(256)
-)
-
-
-INSERT INTO condition_type(id, name)VALUES
-(1, 'equals')
-(2, 'startsWith');
-
-INSERT INTO rule_type(type_id, type_name, description, priority, status) VALUES
-(1,'user','',3,1),
-(2,'source','',2,1),
-(3,'hint','',1,1);
-
-
-INSERT INTO rule(rule_id, type_id, priority, condition_type, condition_value, action_type, action_value, status)
+INSERT INTO rule_type(name, description, priority, status)
 VALUES
-(1,1,10000, 1, 'pganeshan@ea.com','BLACKLIST','', 1),
-(2,1,1, 2, 'svc','REDIRECT','etl', 1),
-(3,2,10000, 1, 'superset','REDIRECT','superset', 1),
-(4,2,10000, 1, 'tableau','REDIRECT','tableau', 1);
+('user','User who submitted the query', 1, 1),
+('tool','Tool used to submit the query', 2, 1),
+('hint','Hint provided with the query', 3, 1);
+
+INSERT INTO routingRule(type_name, subject, priority, action_type, action_value, status)
+VALUES
+('user', 'pganeshan@ea.com', 1,'BLACKLIST','',1),
+('tool', 'superset', 1,'REDIRECT','tool',1),
+('tool', 'tableau', 1,'REDIRECT','tool',1),

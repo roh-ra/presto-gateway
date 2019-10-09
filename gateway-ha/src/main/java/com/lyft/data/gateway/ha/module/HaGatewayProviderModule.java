@@ -14,6 +14,8 @@ import com.lyft.data.gateway.ha.router.HaQueryHistoryManager;
 import com.lyft.data.gateway.ha.router.HaRoutingManager;
 import com.lyft.data.gateway.ha.router.QueryHistoryManager;
 import com.lyft.data.gateway.ha.router.RoutingManager;
+import com.lyft.data.gateway.ha.router.RoutingRuleEngineBackendManager;
+import com.lyft.data.gateway.ha.router.RuleEngineBackendManager;
 import com.lyft.data.proxyserver.ProxyHandler;
 import com.lyft.data.proxyserver.ProxyServer;
 import com.lyft.data.proxyserver.ProxyServerConfiguration;
@@ -25,6 +27,7 @@ public class HaGatewayProviderModule extends AppModule<HaGatewayConfiguration, E
   private final QueryHistoryManager queryHistoryManager;
   private final RoutingManager routingManager;
   private final JdbcConnectionManager connectionManager;
+  private final RuleEngineBackendManager rulesBackendManager;
 
   public HaGatewayProviderModule(HaGatewayConfiguration configuration, Environment environment) {
     super(configuration, environment);
@@ -33,6 +36,7 @@ public class HaGatewayProviderModule extends AppModule<HaGatewayConfiguration, E
     queryHistoryManager = new HaQueryHistoryManager(connectionManager);
     routingManager =
         new HaRoutingManager(gatewayBackendManager, (HaQueryHistoryManager) queryHistoryManager);
+    rulesBackendManager = new RoutingRuleEngineBackendManager(connectionManager);
   }
 
   protected ProxyHandler getProxyHandler() {
@@ -82,6 +86,12 @@ public class HaGatewayProviderModule extends AppModule<HaGatewayConfiguration, E
   @Singleton
   public RoutingManager getRoutingManager() {
     return this.routingManager;
+  }
+
+  @Provides
+  @Singleton
+  public RuleEngineBackendManager getRulesBackendManager() {
+    return this.rulesBackendManager;
   }
 
   @Provides

@@ -6,6 +6,9 @@ import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
 import com.lyft.data.gateway.ha.config.ProxyBackendConfiguration;
 import com.lyft.data.gateway.ha.router.GatewayBackendManager;
+import com.lyft.data.gateway.ha.router.RuleEngineBackendManager;
+import com.lyft.data.rule.engine.models.RoutingRule;
+import com.lyft.data.rule.engine.models.RoutingRuleType;
 import io.dropwizard.views.View;
 
 import java.io.IOException;
@@ -30,6 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 public class EntityEditorResource {
 
   @Inject private GatewayBackendManager gatewayBackendManager;
+  @Inject private RuleEngineBackendManager rulesBackendManager;
   public static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
   @GET
@@ -45,7 +49,9 @@ public class EntityEditorResource {
   }
 
   private enum EntityType {
-    GATEWAY_BACKEND
+    GATEWAY_BACKEND,
+    RULES,
+    RULE_TYPES
   }
 
   @GET
@@ -67,6 +73,14 @@ public class EntityEditorResource {
               OBJECT_MAPPER.readValue(jsonPayload, ProxyBackendConfiguration.class);
           gatewayBackendManager.updateBackend(backend);
           break;
+        case RULES:
+          RoutingRule routingRule = OBJECT_MAPPER.readValue(jsonPayload, RoutingRule.class);
+          rulesBackendManager.updateRule(routingRule);
+          break;
+        case RULE_TYPES:
+          RoutingRuleType ruleType = OBJECT_MAPPER.readValue(jsonPayload, RoutingRuleType.class);
+          rulesBackendManager.updateRuleType(ruleType);
+          break;
         default:
       }
     } catch (IOException e) {
@@ -85,6 +99,10 @@ public class EntityEditorResource {
     switch (entityType) {
       case GATEWAY_BACKEND:
         return Response.ok(gatewayBackendManager.getAllBackends()).build();
+      case RULES:
+        return Response.ok(rulesBackendManager.getAllRules()).build();
+      case RULE_TYPES:
+        return Response.ok(rulesBackendManager.getAllRuleTypes()).build();
       default:
     }
     return Response.ok(ImmutableList.of()).build();
